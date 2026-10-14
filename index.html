@@ -227,7 +227,9 @@ section.block { padding-block: 84px 20px; }
 }
 .copy-btn:hover { filter: brightness(1.08); }
 .contact :focus-visible { outline-color: var(--on-teal); }
-.handles { display: flex; flex-wrap: wrap; gap: 8px 32px; opacity: 0.92; }
+.handles { display: flex; flex-wrap: wrap; gap: 8px 32px; }
+.handles a { color: inherit; text-decoration: underline; text-underline-offset: 5px; overflow-wrap: anywhere; }
+.handles a:hover { text-decoration-thickness: 2px; }
 footer.foot { padding-block: 26px; color: var(--muted); font-size: 0.85rem; }
 
 @media (max-width: 860px) {
@@ -438,7 +440,7 @@ footer.foot { padding-block: 26px; color: var(--muted); font-size: 0.85rem; }
       <span class="mail" id="mail">srividyashenoy31@gmail.com</span>
       <button class="copy-btn" id="copy" type="button">Copy email</button>
     </div>
-    <p class="handles mono"><span>GitHub: https://github.com/Srividya-31</span><span>LinkedIn: https://linkedin.com/in/srividya-807914212/</span></p>
+    <p class="handles mono"><span>LinkedIn: <a href="https://linkedin.com/in/srividya-807914212/" target="_blank" rel="noopener">https://linkedin.com/in/srividya-807914212/</a></span><span>Github: <a href="https://github.com/Srividya-31" target="_blank" rel="noopener">https://github.com/Srividya-31</a></span></p>
   </div>
 </section>
 <footer class="wrap foot">Srividya, based in Mangaluru and Bangalore. Open to relocation.</footer>
