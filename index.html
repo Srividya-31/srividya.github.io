@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Srividya's Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a notebook-like single column. Hero pairs the name with a portrait over a faint embedding scatter (two classes separating, a nod to her t-SNE work). Projects read as experiment rows: description left, measured results right, bars drawn on a true 0-100 scale. */
+:root {
+  color-scheme: dark;
+  --bg: #0A1513;
+  --surface: #11201D;
+  --fg: #E6F0ED;
+  --muted: #9DB3AD;
+  --line: #25403B;
+  --teal: #55C9B7;
+  --teal-soft: #13312C;
+  --marigold: #F2B13A;
+  --on-teal: #08201C;
+  --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+h1, h2, h3, p, ul, dl, dd, figure { margin: 0; padding: 0; }
+ul { list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 4.4vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* nav */
+.nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.nav-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 58px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; text-decoration: none; letter-spacing: -0.01em; }
+.nav-links { display: flex; gap: 22px; }
+.nav-links a { text-decoration: none; font-size: 0.92rem; color: var(--muted); }
+.nav-links a:hover { color: var(--fg); }
+.pub h3 a { text-decoration: none; }
+.pub h3 a:hover { text-decoration: underline; text-decoration-color: var(--marigold); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.pub .read {
+  display: inline-block; margin-top: 10px;
+  font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em;
+  color: var(--teal); text-decoration: none; border-bottom: 1px solid var(--teal);
+}
+.pub .read:hover { color: var(--fg); border-color: var(--marigold); }
+
+/* hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.55; }
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 56px;
+  align-items: center;
+  padding-block: 64px 72px;
+}
+.status {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.05em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 6px 12px;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--marigold); flex: none; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.6rem, 12vw, 8rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  margin-top: 22px;
+}
+.role {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.8vw, 1.7rem);
+  color: var(--teal);
+  margin-top: 14px;
+}
+.lede { max-width: 56ch; font-size: 1.12rem; margin-top: 18px; color: var(--fg); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn {
+  display: inline-block; text-decoration: none; font-weight: 600; font-size: 0.97rem;
+  padding: 12px 22px; border: 1px solid var(--teal);
+}
+.btn.primary { background: var(--teal); color: var(--on-teal); }
+.btn.primary:hover { filter: brightness(1.1); }
+.btn.ghost { color: var(--teal); background: transparent; }
+.btn.ghost:hover { background: var(--teal-soft); }
+.facts { display: flex; flex-wrap: wrap; gap: 14px 40px; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); }
+.fact b { display: block; font-family: var(--font-display); font-size: 2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.fact span { font-size: 0.85rem; color: var(--muted); }
+
+.portrait { position: relative; justify-self: center; width: min(100%, 360px); }
+.portrait::before {
+  content: ""; position: absolute; inset: 18px -18px -18px 18px; background: var(--teal); opacity: 0.9;
+}
+.portrait img { position: relative; display: block; width: 100%; height: auto; border: 1px solid var(--line); background: var(--surface); }
+.portrait figcaption { position: relative; margin-top: 28px; color: var(--muted); }
+
+/* sections */
+section.block { padding-block: 84px 20px; }
+.head { display: grid; gap: 10px; margin-bottom: 40px; max-width: 760px; }
+
+/* experience */
+.job { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+.job-meta { display: grid; gap: 6px; align-content: start; }
+.job-meta .mono { color: var(--muted); }
+.job-meta .org { font-weight: 600; }
+.points { display: grid; gap: 18px; }
+.points li { position: relative; padding-left: 22px; }
+.points li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 10px; height: 2px; background: var(--marigold); }
+.points b { font-weight: 600; }
+
+/* projects */
+.project {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 40px;
+  padding-block: 40px; border-top: 1px solid var(--line);
+}
+.project:last-child { border-bottom: 1px solid var(--line); }
+.project .copy { display: grid; gap: 14px; align-content: start; }
+.project .copy p { color: var(--fg); max-width: 60ch; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tags li {
+  font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.03em;
+  color: var(--teal); background: var(--teal-soft); padding: 4px 9px;
+}
+.metrics { background: var(--surface); border: 1px solid var(--line); padding: 22px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+.metrics .cap { color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.m { display: grid; gap: 6px; }
+.m-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.m-top span { font-size: 0.95rem; }
+.m-top b { font-family: var(--font-mono); font-weight: 500; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+.bar { height: 10px; background: var(--line); }
+.bar i { display: block; height: 100%; width: var(--v); background: var(--teal); }
+.bar i.best { background: var(--marigold); }
+.scale { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.7rem; }
+.note { color: var(--muted); font-size: 0.88rem; }
+
+/* publications */
+.pub { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 24px; padding-block: 24px; border-top: 1px solid var(--line); }
+.pub:last-child { border-bottom: 1px solid var(--line); }
+.pub .yr { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--teal); }
+.pub h3 { font-size: 1.2rem; }
+.pub .venue { margin-top: 6px; color: var(--muted); }
+
+/* toolkit */
+.kit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+.kit-row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; padding-block: 18px; border-top: 1px solid var(--line); }
+.kit-row dt { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.kit-row dd { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.kit-row dd span { font-weight: 500; }
+
+/* education */
+.edu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.edu-card { background: var(--surface); border: 1px solid var(--line); padding: 26px; display: grid; gap: 10px; align-content: start; }
+.edu-card .big { font-family: var(--font-display); font-weight: 800; font-size: 3.2rem; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--teal); }
+.edu-card .big small { font-family: var(--font-mono); font-weight: 400; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--muted); margin-left: 8px; }
+.edu-card .yrs { color: var(--muted); }
+.honor { display: inline-block; width: fit-content; background: var(--marigold); color: #1B1300; font-weight: 600; font-size: 0.82rem; padding: 4px 10px; }
+
+/* contact */
+.contact { background: var(--teal); color: var(--on-teal); margin-top: 84px; }
+.contact .wrap { padding-block: 72px; display: grid; gap: 22px; }
+.contact .eyebrow { color: inherit; opacity: 0.8; }
+.contact h2 { max-width: 20ch; }
+.mail-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.mail {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(1.15rem, 3.6vw, 2rem);
+  letter-spacing: -0.01em; overflow-wrap: anywhere; user-select: all;
+}
+.copy-btn {
+  font: inherit; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.05em;
+  background: var(--on-teal); color: var(--teal); border: 0; padding: 10px 16px; cursor: pointer; font-weight: 500;
+}
+.copy-btn:hover { filter: brightness(1.08); }
+.contact :focus-visible { outline-color: var(--on-teal); }
+.handles { display: flex; flex-wrap: wrap; gap: 8px 32px; opacity: 0.92; }
+footer.foot { padding-block: 26px; color: var(--muted); font-size: 0.85rem; }
+
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 40px 56px; }
+  .portrait { order: -1; width: min(100%, 260px); justify-self: start; margin-right: 18px; }
+  #field { opacity: 0.35; }
+  .job, .project { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .kit, .edu { grid-template-columns: minmax(0, 1fr); }
+  section.block { padding-top: 64px; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .nav-links { display: none; }
+  .kit-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .pub { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .metrics { padding: 18px; }
+  .contact .wrap { padding-block: 56px; }
+}
+</style>
+</head>
+<body>
+
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">Srividya</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#work">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#papers">Papers</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="status"><span class="dot"></span>Open to roles in India and abroad</p>
+        <h1>Srividya</h1>
+        <p class="role">AI and machine learning engineer</p>
+        <p class="lede">I build models that read images and text together, then wrap them in services other people can run. I have three IEEE papers, a year of validation engineering at Intel, and an M.Tech in AI and Decision Science from Manipal.</p>
+        <div class="cta">
+          <a class="btn primary" href="#projects">See the projects</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+        <div class="facts">
+          <div class="fact"><b>3</b><span>IEEE publications</span></div>
+          <div class="fact"><b>12 mo</b><span>at Intel Technology India</span></div>
+          <div class="fact"><b>Rank 1</b><span>VTU, B.E. gold medalist</span></div>
+        </div>
+      </div>
+      <figure class="portrait">
+        <img src="photo.jpg" alt="Portrait of Srividya" width="640" height="845">
+        <figcaption class="mono">M.Tech, AI and Decision Science<br>Manipal Institute of Technology</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Experience</p>
+        <h2>A year of validating real systems at Intel</h2>
+      </div>
+      <div class="job">
+        <div class="job-meta">
+          <p class="org">Intel Technology India Pvt. Ltd.</p>
+          <p>Platform Validation Engineer</p>
+          <p class="mono">Jun 2025 to May 2026</p>
+        </div>
+        <ul class="points">
+          <li><b>Vision-language validation service.</b> Built it end to end on Hugging Face Qwen models. Testers describe what to check in plain language and the service analyzes images, videos and VM screenshots. The Python backend runs on Flask and FastAPI in Docker, with configurable video frame extraction, VM screenshot capture and structured HTML and JSON test reports.</li>
+          <li><b>Automated image flashing.</b> Replaced a manual EMT-S flashing routine with an application. Users pick the EMT image type, select the USB device and enter VM credentials before the flash starts.</li>
+          <li><b>Weekly Edge Microvisor Toolkit validation.</b> Ran GIO test cases, analyzed failures, debugged them and reported findings to senior engineers.</li>
+          <li><b>Documentation review.</b> Checked EMT Git repositories and technical docs for errors, outdated steps, inconsistencies and typos.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Projects</p>
+        <h2>Three models, with the results as measured</h2>
+      </div>
+
+      <article class="project">
+        <div class="copy">
+          <h3>Gated Contrastive Multimodal Fusion for negative meme detection</h3>
+          <p>A fusion architecture that aligns text and image embeddings. It fine-tunes DistilBERT and ViT layers, weights each modality dynamically with a softmax, adds attention, and trains on cross-entropy plus contrastive loss to catch subtle negative sentiment. Posts are classed as positive, neutral or negative.</p>
+          <p class="note">The gap between the two datasets is the finding: plain image-text posts are far easier than sarcastic, humorous memes.</p>
+          <ul class="tags"><li>Multimodal AI</li><li>TensorFlow</li><li>Computer vision</li><li>Sentiment analysis</li></ul>
+        </div>
+        <div class="metrics">
+          <p class="mono cap"><span>Accuracy</span><span>scale 0 to 100%</span></p>
+          <div class="m"><div class="m-top"><span>MVSA-Single</span><b>76.70%</b></div><div class="bar"><i class="best" style="--v:76.7%"></i></div></div>
+          <div class="m"><div class="m-top"><span>Memotion7K</span><b>54.54%</b></div><div class="bar"><i style="--v:54.54%"></i></div></div>
+          <div class="scale mono"><span>0</span><span>50</span><span>100</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="copy">
+          <h3>Detecting anomalous Bitcoin transactions</h3>
+          <p>Models for financial fraud detection and AML/CFT monitoring. After preprocessing, t-SNE plots showed how fraudulent and legitimate transactions separate in feature space. Random Forest, SVM and KNN were then compared on accuracy, precision and recall.</p>
+          <ul class="tags"><li>Anomaly detection</li><li>Classification</li><li>Fraud detection</li><li>t-SNE</li></ul>
+        </div>
+        <div class="metrics">
+          <p class="mono cap"><span>Test accuracy</span><span>scale 0 to 100%</span></p>
+          <div class="m"><div class="m-top"><span>Random Forest</span><b>88%</b></div><div class="bar"><i class="best" style="--v:88%"></i></div></div>
+          <div class="m"><div class="m-top"><span>KNN</span><b>76%</b></div><div class="bar"><i style="--v:76%"></i></div></div>
+          <div class="m"><div class="m-top"><span>SVM</span><b>73%</b></div><div class="bar"><i style="--v:73%"></i></div></div>
+          <div class="scale mono"><span>0</span><span>50</span><span>100</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="copy">
+          <h3>Water pump condition prediction</h3>
+          <p>A predictive-maintenance system that classifies multi-state pump conditions from multivariate sensor time series. I built the pipeline that cleans, normalizes and windows noisy readings for recurrent networks, then compared a simple RNN with an LSTM.</p>
+          <ul class="tags"><li>LSTM</li><li>RNN</li><li>Time series</li><li>Pandas</li><li>Scikit-learn</li></ul>
+        </div>
+        <div class="metrics">
+          <p class="mono cap"><span>Accuracy</span><span>scale 0 to 100%</span></p>
+          <div class="m"><div class="m-top"><span>LSTM</span><b>97.94%</b></div><div class="bar"><i class="best" style="--v:97.94%"></i></div></div>
+          <div class="m"><div class="m-top"><span>Simple RNN</span><b>92.71%</b></div><div class="bar"><i style="--v:92.71%"></i></div></div>
+          <div class="scale mono"><span>0</span><span>50</span><span>100</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="papers">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Publications</p>
+        <h2>Peer-reviewed, all three in 2025</h2>
+      </div>
+      <div>
+        <article class="pub">
+          <p class="yr">2025</p>
+          <div><h3><a href="https://ieeexplore.ieee.org/abstract/document/11177202/" target="_blank" rel="noopener">Contrastive and Attention-Based Multimodal Fusion: Detecting Negative Memes</a></h3><p class="venue">IEEE Access</p><a class="read" href="https://ieeexplore.ieee.org/abstract/document/11177202/" target="_blank" rel="noopener">Read on IEEE Xplore</a></div>
+        </article>
+        <article class="pub">
+          <p class="yr">2025</p>
+          <div><h3><a href="https://ieeexplore.ieee.org/abstract/document/11375972/" target="_blank" rel="noopener">Emotion Detection in Real-Time Using Computer Vision Techniques</a></h3><p class="venue">5th ICERECT</p><a class="read" href="https://ieeexplore.ieee.org/abstract/document/11375972/" target="_blank" rel="noopener">Read on IEEE Xplore</a></div>
+        </article>
+        <article class="pub">
+          <p class="yr">2025</p>
+          <div><h3><a href="https://ieeexplore.ieee.org/abstract/document/10987475/" target="_blank" rel="noopener">Exploring the Effectiveness of Machine Learning Models in Detecting Anomalous Transactions</a></h3><p class="venue">AIDE</p><a class="read" href="https://ieeexplore.ieee.org/abstract/document/10987475/" target="_blank" rel="noopener">Read on IEEE Xplore</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="toolkit">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Toolkit</p>
+        <h2>What I work with</h2>
+      </div>
+      <dl class="kit">
+        <div class="kit-row"><dt>Languages</dt><dd><span>Python</span><span>SQL</span><span>HTML/CSS</span></dd></div>
+        <div class="kit-row"><dt>ML and DL</dt><dd><span>PyTorch</span><span>TensorFlow</span><span>Scikit-learn</span><span>Hugging Face Transformers</span></dd></div>
+        <div class="kit-row"><dt>NLP and LLMs</dt><dd><span>NLP</span><span>LLMs</span><span>VLMs</span><span>BERT</span><span>DistilBERT</span><span>Generative AI</span></dd></div>
+        <div class="kit-row"><dt>Vision</dt><dd><span>ViT</span><span>OpenCV</span><span>Image processing</span><span>Multimodal AI</span></dd></div>
+        <div class="kit-row"><dt>Tools</dt><dd><span>Docker</span><span>Flask</span><span>FastAPI</span><span>Git</span><span>Jupyter</span><span>VS Code</span><span>Google Colab</span></dd></div>
+        <div class="kit-row"><dt>AI assistants</dt><dd><span>GitHub Copilot</span><span>M365 Copilot</span><span>Claude</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Education</p>
+        <h2>Two degrees, both with strong results</h2>
+      </div>
+      <div class="edu">
+        <div class="edu-card">
+          <p class="big">8.71<small>CGPA</small></p>
+          <h3>M.Tech, Artificial Intelligence and Decision Science</h3>
+          <p>Manipal Institute of Technology, Manipal</p>
+          <p class="yrs mono">2024 to 2026</p>
+        </div>
+        <div class="edu-card">
+          <p class="big">9.18<small>CGPA</small></p>
+          <h3>B.E., Computer Science and Engineering (Data Science)</h3>
+          <p>Sahyadri College of Engineering and Management, Mangalore</p>
+          <p class="yrs mono">2020 to 2024</p>
+          <p class="honor">University 1st rank, gold medalist</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2>Hiring for data science, NLP or applied AI? Let's talk.</h2>
+    <div class="mail-row">
+      <span class="mail" id="mail">srividyashenoy31@gmail.com</span>
+      <button class="copy-btn" id="copy" type="button">Copy email</button>
+    </div>
+    <p class="handles mono"><span>GitHub: github/srividya</span><span>LinkedIn: linkedin/srividya</span></p>
+  </div>
+</section>
+<footer class="wrap foot">Srividya, based in Mangaluru and Bangalore. Open to relocation.</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var canvas = document.getElementById('field');
+  var ctx = canvas.getContext('2d');
+
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function draw() {
+    var hero = canvas.parentElement;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = hero.clientWidth, h = hero.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var cs = getComputedStyle(root);
+    var teal = cs.getPropertyValue('--teal').trim();
+    var gold = cs.getPropertyValue('--marigold').trim();
+    var grey = cs.getPropertyValue('--line').trim();
+    var r = rng(7);
+    function gauss() {
+      var u = 1 - r(), v = r();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+    function cloud(cx, cy, sx, sy, n, color, size) {
+      ctx.fillStyle = color;
+      for (var i = 0; i < n; i++) {
+        var x = (cx + gauss() * sx) * w, y = (cy + gauss() * sy) * h;
+        ctx.beginPath(); ctx.arc(x, y, size, 0, 6.2832); ctx.fill();
+      }
+    }
+    cloud(0.5, 0.5, 0.4, 0.4, 90, grey, 2);
+    cloud(0.8, 0.3, 0.07, 0.13, 150, teal, 2.6);
+    cloud(0.92, 0.72, 0.05, 0.11, 110, gold, 2.6);
+  }
+  if (window.ResizeObserver) { new ResizeObserver(draw).observe(canvas.parentElement); } else { window.addEventListener('resize', draw); }
+  draw();
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(draw); }
+
+  var btn = document.getElementById('copy');
+  var mail = document.getElementById('mail');
+  btn.addEventListener('click', function () {
+    function selectText() {
+      var range = document.createRange();
+      range.selectNodeContents(mail);
+      var sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+      btn.textContent = 'Selected, press copy';
+    }
+    try {
+      navigator.clipboard.writeText(mail.textContent.trim()).then(function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy email'; }, 2000);
+      }, selectText);
+    } catch (e) { selectText(); }
+  });
+})();
+</script>
+
+</body>
+</html>
